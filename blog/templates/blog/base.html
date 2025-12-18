@@ -1,0 +1,346 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyBlog - {% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+    <style>
+        .nav-blur {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .logo-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite;
+            position: relative;
+        }
+        
+        @keyframes gradient-shift {
+            0%, 100% {
+                background-position: 0% center;
+            }
+            50% {
+                background-position: 100% center;
+            }
+        }
+        
+        .logo-text {
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+        
+        .logo-letter {
+            display: inline-block;
+            animation: wave 2s ease-in-out infinite;
+        }
+        
+        .logo-letter:nth-child(1) { animation-delay: 0s; }
+        .logo-letter:nth-child(2) { animation-delay: 0.1s; }
+        .logo-letter:nth-child(3) { animation-delay: 0.2s; }
+        .logo-letter:nth-child(4) { animation-delay: 0.3s; }
+        .logo-letter:nth-child(5) { animation-delay: 0.4s; }
+        .logo-letter:nth-child(6) { animation-delay: 0.5s; }
+        .logo-letter:nth-child(7) { animation-delay: 0.6s; }
+        .logo-letter:nth-child(8) { animation-delay: 0.7s; }
+        .logo-letter:nth-child(9) { animation-delay: 0.8s; }
+        .logo-letter:nth-child(10) { animation-delay: 0.9s; }
+        .logo-letter:nth-child(11) { animation-delay: 1s; }
+        .logo-letter:nth-child(12) { animation-delay: 1.1s; }
+        .logo-letter:nth-child(13) { animation-delay: 1.2s; }
+        .logo-letter:nth-child(14) { animation-delay: 1.3s; }
+        .logo-letter:nth-child(15) { animation-delay: 1.4s; }
+        .logo-letter:nth-child(16) { animation-delay: 1.5s; }
+        .logo-letter:nth-child(17) { animation-delay: 1.6s; }
+        .logo-letter:nth-child(18) { animation-delay: 1.7s; }
+        .logo-letter:nth-child(19) { animation-delay: 1.8s; }
+        .logo-letter:nth-child(20) { animation-delay: 1.9s; }
+        .logo-letter:nth-child(21) { animation-delay: 2s; }
+        .logo-letter:nth-child(22) { animation-delay: 2.1s; }
+        
+        @keyframes wave {
+            0%, 100% {
+                transform: translateY(0px) scale(1);
+            }
+            50% {
+                transform: translateY(-5px) scale(1.05);
+            }
+        }
+        
+        .logo-glow {
+            position: relative;
+            text-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .user-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        .user-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .mobile-menu.active {
+            max-height: 500px;
+        }
+        .profile-ring {
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900">
+    <nav class="nav-blur fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-4 lg:px-6">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo/Brand -->
+                <div class="flex items-center space-x-3">
+                    <a href="{% url 'home' %}" class="flex items-center space-x-3 group">
+                        <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center transform group-hover:rotate-6 transition-transform duration-300">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xl lg:text-2xl font-bold logo-gradient hidden sm:block">
+                            STARTUP COMMUNITY BLOGS
+                        </span>
+                        <span class="text-xl font-bold logo-gradient sm:hidden">SC</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-6">
+                    {% if user.is_authenticated %}
+                        <!-- User Profile Dropdown -->
+                        <div class="relative">
+                            <button onclick="toggleUserMenu()" class="flex items-center space-x-3 focus:outline-none group">
+                                {% with user_profile=user.userprofile %}
+                                    {% if user_profile.profile_picture %}
+                                        <img src="{{ user_profile.profile_picture.url }}" 
+                                             alt="{{ user.username }}" 
+                                             class="w-10 h-10 rounded-full object-cover profile-ring group-hover:shadow-lg transition-all duration-300">
+                                    {% else %}
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg profile-ring group-hover:shadow-lg transition-all duration-300">
+                                            {{ user.username|slice:":1"|upper }}
+                                        </div>
+                                    {% endif %}
+                                    <div class="hidden lg:block text-left">
+                                        <p class="text-sm font-semibold text-gray-900">{{ user.username }}</p>
+                                        <p class="text-xs text-gray-600">Member</p>
+                                    </div>
+                                {% endwith %}
+                                <svg class="w-5 h-5 text-gray-600 transform group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            
+                            <!-- Dropdown Menu -->
+                            <div id="user-menu" class="user-menu absolute right-0 mt-3 w-64 bg-gray-800 rounded-xl shadow-2xl overflow-hidden border border-gray-700">
+                                <div class="p-4 bg-gradient-to-r from-purple-600 to-indigo-600">
+                                    <div class="flex items-center space-x-3">
+                                        {% with user_profile=user.userprofile %}
+                                            {% if user_profile.profile_picture %}
+                                                <img src="{{ user_profile.profile_picture.url }}" 
+                                                     alt="{{ user.username }}" 
+                                                     class="w-12 h-12 rounded-full object-cover border-2 border-white">
+                                            {% else %}
+                                                <div class="w-12 h-12 rounded-full bg-white bg-opacity-30 flex items-center justify-center text-white font-bold text-xl border-2 border-white">
+                                                    {{ user.username|slice:":1"|upper }}
+                                                </div>
+                                            {% endif %}
+                                        {% endwith %}
+                                        <div>
+                                            <p class="text-white font-semibold">{{ user.username }}</p>
+                                            <p class="text-purple-200 text-sm">{{ user.email }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="py-2">
+                                    <a href="{% url 'account_settings' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors duration-200">
+                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        <span>Account Settings</span>
+                                    </a>
+                                    <a href="{% url 'logout' %}" class="flex items-center px-4 py-3 text-red-400 hover:bg-gray-700 transition-colors duration-200">
+                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                        </svg>
+                                        <span>Logout</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="nav-link text-gray-700 px-4 py-2 rounded-lg hover:text-purple-600 font-medium">
+                            Login
+                        </a>
+                        <a href="{% url 'register' %}" class="btn-gradient text-white px-6 py-2.5 rounded-lg font-semibold shadow-lg">
+                            Get Started
+                        </a>
+                    {% endif %}
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-gray-700 focus:outline-none p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                    <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu md:hidden">
+                <div class="py-4 space-y-2">
+                    {% if user.is_authenticated %}
+                        <!-- Mobile User Info -->
+                        <div class="px-4 py-3 bg-gray-50 rounded-lg mb-4 border border-gray-200">
+                            <div class="flex items-center space-x-3">
+                                {% with user_profile=user.userprofile %}
+                                    {% if user_profile.profile_picture %}
+                                        <img src="{{ user_profile.profile_picture.url }}" 
+                                             alt="{{ user.username }}" 
+                                             class="w-12 h-12 rounded-full object-cover">
+                                    {% else %}
+                                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg">
+                                            {{ user.username|slice:":1"|upper }}
+                                        </div>
+                                    {% endif %}
+                                {% endwith %}
+                                <div>
+                                    <p class="text-gray-900 font-semibold">{{ user.username }}</p>
+                                    <p class="text-gray-600 text-sm">{{ user.email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url 'account_settings' %}" class="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                            Account Settings
+                        </a>
+                        <a href="{% url 'logout' %}" class="block px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                            Logout
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                            Login
+                        </a>
+                        <a href="{% url 'register' %}" class="block px-4 py-3 btn-gradient text-white text-center rounded-lg font-semibold">
+                            Get Started
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Spacer -->
+    <div class="h-20"></div>
+
+    {% if messages %}
+        <div class="container mx-auto px-4 py-4">
+            {% for message in messages %}
+                <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg mb-3 shadow-lg flex items-center space-x-3 animate-fade-in">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+
+    <script>
+        function toggleUserMenu() {
+            const menu = document.getElementById('user-menu');
+            menu.classList.toggle('active');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+            
+            menu.classList.toggle('active');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        }
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('user-menu');
+            const isClickInside = event.target.closest('.relative');
+            
+            if (!isClickInside && userMenu) {
+                userMenu.classList.remove('active');
+            }
+        });
+
+        // Close mobile menu when window is resized to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) {
+                const menu = document.getElementById('mobile-menu');
+                const menuIcon = document.getElementById('menu-icon');
+                const closeIcon = document.getElementById('close-icon');
+                
+                menu.classList.remove('active');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
