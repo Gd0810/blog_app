@@ -192,7 +192,7 @@
     <div class="hero-content container mx-auto px-4">
         <div class="text-center text-white">
             <h1 class="text-5xl lg:text-7xl font-bold mb-6 floating">
-                Welcome to Startup Community
+                Welcome to General Community
             </h1>
             <p class="text-xl lg:text-2xl mb-8 text-purple-100 max-w-3xl mx-auto">
                 Discover inspiring stories, insights, and innovations from the startup ecosystem
@@ -211,7 +211,7 @@
                     <div class="text-purple-200">Readers</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-4xl font-bold mb-2">15+</div>
+                    <div class="text-4xl font-bold mb-2">10+</div>
                     <div class="text-purple-200">Categories</div>
                 </div>
             </div>
@@ -220,7 +220,7 @@
 </section>
 
 <!-- Blog Cards Section -->
-<section class="container mx-auto py-16 lg:py-24 px-4">
+<section id="latest-stories" class="container mx-auto py-1 lg:py-24 px-4">
     <div class="text-center mb-16">
         <h2 class="section-title text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
             Latest Stories
@@ -229,8 +229,44 @@
             Explore our curated collection of articles, insights, and stories from the startup world
         </p>
     </div>
+
+    <div class="max-w-5xl mx-auto mb-10 bg-white border border-gray-200 rounded-2xl shadow-sm p-4 lg:p-5">
+        <form id="blog-filter-form" method="GET" action="{% url 'home' %}#latest-stories" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+            <div class="md:col-span-6">
+                <label for="blog-search" class="block text-sm font-semibold text-gray-700 mb-2">Search By Blog Name</label>
+                <input
+                    id="blog-search"
+                    type="text"
+                    name="q"
+                    value="{{ selected_query }}"
+                    placeholder="Type blog title..."
+                    class="w-full p-3 bg-white text-gray-800 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                >
+            </div>
+            <div class="md:col-span-4">
+                <label for="blog-category" class="block text-sm font-semibold text-gray-700 mb-2">Filter By Category</label>
+                <select
+                    id="blog-category"
+                    name="category"
+                    class="w-full p-3 bg-white text-gray-800 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                >
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:'s' %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="md:col-span-2">
+                <a href="{% url 'home' %}#latest-stories" class="w-full block text-center px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-300">
+                    Clear
+                </a>
+            </div>
+        </form>
+    </div>
     
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for blog in blogs %}
             <div class="blog-card fade-in stagger-{{ forloop.counter|divisibleby:4|yesno:'4,1' }}">
                 <div class="relative overflow-hidden">
@@ -308,6 +344,32 @@
 
 
 <script>
+    const filterForm = document.getElementById('blog-filter-form');
+    const searchInput = document.getElementById('blog-search');
+    const categorySelect = document.getElementById('blog-category');
+    let searchTimer = null;
+
+    if (filterForm && searchInput && categorySelect) {
+        searchInput.addEventListener('input', function () {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                filterForm.submit();
+            }, 350);
+        });
+
+        categorySelect.addEventListener('change', function () {
+            filterForm.submit();
+        });
+    }
+
+    // Keep user focused on results after filtering.
+    if (window.location.search.includes('q=') || window.location.search.includes('category=')) {
+        const section = document.getElementById('latest-stories');
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
     // Intersection Observer for scroll animations
     const observerOptions = {
         threshold: 0.1,

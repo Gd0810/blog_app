@@ -9,8 +9,24 @@ import logging
 logger = logging.getLogger(__name__)
 
 def home(request):
-    blogs = Blog.objects.all().order_by('-published_date')
-    return render(request, 'blog/home.html', {'blogs': blogs})
+    query = request.GET.get('q', '').strip()
+    category_id = request.GET.get('category', '').strip()
+
+    blogs = Blog.objects.select_related('category').all().order_by('-published_date')
+    categories = Category.objects.all().order_by('name')
+
+    if query:
+        blogs = blogs.filter(title__icontains=query)
+
+    if category_id:
+        blogs = blogs.filter(category_id=category_id)
+
+    return render(request, 'blog/home.html', {
+        'blogs': blogs,
+        'categories': categories,
+        'selected_query': query,
+        'selected_category': category_id,
+    })
 
 def blog_detail(request, id):
     blog = get_object_or_404(Blog, id=id)
