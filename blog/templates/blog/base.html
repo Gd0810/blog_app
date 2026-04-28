@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyBlog - {% block title %}{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.2.4/dist/index.global.min.js"></script>
     {% block extra_head %}{% endblock %}
     <style>
         .nav-blur {
@@ -150,7 +150,7 @@
                             </svg>
                         </div>
                         <span class="text-xl lg:text-2xl font-bold logo-gradient hidden sm:block">
-                            STARTUP COMMUNITY BLOGS
+                            GENERAL COMMUNITY BLOGS
                         </span>
                         <span class="text-xl font-bold logo-gradient sm:hidden">SC</span>
                     </a>
@@ -192,7 +192,7 @@
                                                      alt="{{ user.username }}" 
                                                      class="w-12 h-12 rounded-full object-cover border-2 border-white">
                                             {% else %}
-                                                <div class="w-12 h-12 rounded-full bg-white bg-opacity-30 flex items-center justify-center text-white font-bold text-xl border-2 border-white">
+                                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl border-2 border-white">
                                                     {{ user.username|slice:":1"|upper }}
                                                 </div>
                                             {% endif %}
